@@ -1,49 +1,6 @@
-import { z } from "zod";
+import type { Cafe24AuthParams, ValidationResult } from "@/types/params";
+import { Cafe24AuthParamsSchema } from "./cafe24-auth-params.schema";
 
-/**
- * Cafe24 인증 파라미터 스키마
- */
-export const Cafe24AuthParamsSchema = z.object({
-  lang: z.string(),
-  mall_id: z.string(),
-  nation: z.string(),
-  shop_no: z.string(),
-  timestamp: z.string(),
-  user_id: z.string(),
-  user_name: z.string(),
-  user_type: z.string(),
-  hmac: z.string(),
-});
-
-export type Cafe24AuthParams = z.infer<typeof Cafe24AuthParamsSchema>;
-
-/**
- * 유효성 검증 성공 결과 타입
- */
-export type ValidationSuccess = {
-  success: true;
-  data: Cafe24AuthParams;
-};
-
-/**
- * 유효성 검증 실패 결과 타입
- */
-export type ValidationError = {
-  success: false;
-  error: string;
-  issues?: Array<{ path: string; message: string }>;
-};
-
-/**
- * 유효성 검증 결과 타입
- */
-export type ValidationResult = ValidationSuccess | ValidationError;
-
-/**
- * URL 쿼리 파라미터에서 Cafe24 인증 파라미터 추출
- * @param searchParams URL 검색 파라미터
- * @returns 파싱된 Cafe24 인증 파라미터
- */
 export function parseCafe24AuthParams(searchParams: URLSearchParams) {
   const params = {
     lang: searchParams.get("lang") || undefined,
@@ -67,7 +24,7 @@ export function parseCafe24AuthParams(searchParams: URLSearchParams) {
  */
 export function validateCafe24AuthParams(
   searchParams: URLSearchParams
-): ValidationResult {
+): ValidationResult<Cafe24AuthParams> {
   const params = parseCafe24AuthParams(searchParams);
   const parseResult = Cafe24AuthParamsSchema.safeParse(params);
 

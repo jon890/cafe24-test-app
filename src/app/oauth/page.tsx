@@ -1,11 +1,9 @@
 "use client";
 
 import { getCafe24Config } from "@/config/cafe24-config";
-import {
-  Cafe24AuthParams,
-  validateCafe24AuthParams,
-} from "@/lib/cafe24-auth-parser";
+import { validateCafe24AuthParams } from "@/lib/cafe24-auth-parser";
 import { generateCsrfToken } from "@/lib/csrf-utils";
+import type { Cafe24AuthParams } from "@/types/params";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
@@ -47,6 +45,8 @@ function OAuthHandler() {
     authUrl.searchParams.append("redirect_uri", config.REDIRECT_URI);
     authUrl.searchParams.append("scope", config.SCOPE);
     authUrl.searchParams.append("state", csrfToken);
+
+    console.log(authUrl.toString());
 
     // 인증 페이지로 리디렉션
     window.location.href = authUrl.toString();
